@@ -1,6 +1,6 @@
 package com.demo.controller;
 
-import com.demo.dto.AccesstokenDto;
+import com.demo.dto.AccessTokenDTO;
 import com.demo.dto.GithubUser;
 import com.demo.provider.GithubProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,27 +15,28 @@ public class AuthorizeController {
     @Autowired
     private GithubProvider githubProvider;
 
-    @Value("github.client.id")
+    @Value("${github.client.id}")
     private  String client_id;
 
-    @Value("github.client.secret")
+    @Value("${github.client.secret}")
     private  String client_secret;
 
-    @Value("github.redirect.uri")
+    @Value("${github.redirect.uri}")
     private  String redirect_uri;
 
     @GetMapping("/callback")
     public String callback(@RequestParam(name = "code") String code,
                            @RequestParam(name = "state") String state){
-        AccesstokenDto accesstokenDto = new AccesstokenDto();
-        accesstokenDto.setClient_id(client_id);
-        accesstokenDto.setClient_secret(client_secret);
-        accesstokenDto.setCode(code);
-        accesstokenDto.setRedirect_uri(redirect_uri);
-        accesstokenDto.setState(state);
-        String accessToken = githubProvider.getAccessToken(accesstokenDto);
+        AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
+        accessTokenDTO.setClient_id(client_id);
+        accessTokenDTO.setClient_secret(client_secret);
+        accessTokenDTO.setCode(code);
+        accessTokenDTO.setRedirect_uri(redirect_uri);
+        accessTokenDTO.setState(state);
+        String accessToken = githubProvider.getAccessToken(accessTokenDTO);
         GithubUser user = githubProvider.getUser(accessToken);
         System.out.println(user.getName());
+        //githubProvider.getAccessToken(accessTokenDTO);
         return "index";
     }
 }

@@ -1,7 +1,7 @@
 package com.demo.provider;
 
 import com.alibaba.fastjson.JSON;
-import com.demo.dto.AccesstokenDto;
+import com.demo.dto.AccessTokenDTO;
 import com.demo.dto.GithubUser;
 import okhttp3.*;
 import org.springframework.stereotype.Component;
@@ -10,12 +10,12 @@ import java.io.IOException;
 
 @Component
 public class GithubProvider {
-    public String getAccessToken(AccesstokenDto accesstokenDto){
+    public String getAccessToken(AccessTokenDTO accesstokenDTO){
         MediaType mediaType = MediaType.get("application/json; charset=utf-8");
 
         OkHttpClient client = new OkHttpClient();
 
-        RequestBody body = RequestBody.create(mediaType,JSON.toJSONString(accesstokenDto));
+        RequestBody body = RequestBody.create(mediaType,JSON.toJSONString(accesstokenDTO));
         Request request = new Request.Builder()
                 .url("https://github.com/login/oauth/access_token")
                 .post(body)
@@ -23,8 +23,12 @@ public class GithubProvider {
         try (Response response = client.newCall(request).execute()) {
             String string = response.body().string();
             String s1 = string.split("&")[0].split("=")[1];
+             //System.out.println(s1);
             return s1;
-        } catch (IOException e) {
+//            System.out.println(string);
+//            return string;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return null;
     }
