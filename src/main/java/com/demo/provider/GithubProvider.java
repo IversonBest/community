@@ -5,8 +5,10 @@ import com.demo.dto.AccessTokenDTO;
 import com.demo.dto.GithubUser;
 import okhttp3.*;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+
 
 @Component
 public class GithubProvider {
