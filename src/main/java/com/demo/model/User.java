@@ -11,4 +11,5 @@ public class User {
     private Long gmtCreate;
     private Long gmtModified;
     private String avatarUrl;
+    //"avatar_url": "https://avatars0.githubusercontent.com/u/1358776?v=4"
 }
