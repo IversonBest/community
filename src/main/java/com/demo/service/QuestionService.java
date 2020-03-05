@@ -4,6 +4,7 @@ import com.demo.dto.PaginationDTO;
 import com.demo.dto.QuestionDTO;
 import com.demo.exception.CustomizeErrorCode;
 import com.demo.exception.CustomizeException;
+import com.demo.mapper.QuestionExtMapper;
 import com.demo.mapper.QuestionMapper;
 import com.demo.mapper.UserMapper;
 import com.demo.model.Question;
@@ -24,6 +25,9 @@ public class QuestionService {
     private QuestionMapper questionMapper;
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private QuestionExtMapper questionExtMapper;
 
     public PaginationDTO list(Integer page, Integer size) {
 
@@ -61,7 +65,7 @@ public class QuestionService {
         return paginationDTO;
     }
 
-    public PaginationDTO list(Integer userId, Integer page, Integer size) {
+    public PaginationDTO list(Long userId, Integer page, Integer size) {
         PaginationDTO paginationDTO = new PaginationDTO();
         Integer totalPage;
         QuestionExample questionExample = new QuestionExample();
@@ -102,7 +106,7 @@ public class QuestionService {
         return paginationDTO;
     }
 
-    public QuestionDTO getById(Integer id) {
+    public QuestionDTO getById(long id) {
         Question question = questionMapper.selectByPrimaryKey(id);
         if (question==null){
             throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
@@ -119,6 +123,9 @@ public class QuestionService {
             //创建
             question.setGmtCreate(System.currentTimeMillis());
             question.setGmtModified(question.getGmtCreate());
+            question.setViewCount(0);
+            question.setLikeCount(0);
+            question.setCommentCount(0);
             questionMapper.insert(question);
         }else {
             //更新
@@ -136,5 +143,12 @@ public class QuestionService {
             }
 
         }
+    }
+
+    public void incView(Long id) {
+        Question question = new Question();
+        question.setId(id);
+        question.setViewCount(1);
+        questionExtMapper.incView(question);//原来的viewCount加上新的问题的viewCount,而新的设为了1
     }
 }
