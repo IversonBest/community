@@ -10,6 +10,7 @@ import com.demo.model.Comment;
 import com.demo.model.Question;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CommentService {
@@ -23,6 +24,7 @@ public class CommentService {
     @Autowired
     private QuestionExtMapper questionExtMapper;
 
+    @Transactional//增加事务（作用：比如当commentMapper.insert执行成功，增加回复数的方法失败，这样commentMapper.insert也不会执行，整个方法都在一个事务中）
     public void insert(Comment comment) {
         //评论没有parentId异常
         if (comment.getParentId()==null||comment.getParentId()==0){
