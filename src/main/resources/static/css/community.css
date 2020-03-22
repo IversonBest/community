@@ -125,3 +125,7 @@ body {
     margin-right: 10px;
     white-space: normal;
 }
+
+.footer {
+    padding: 10px 25%;
+}
